@@ -1,16 +1,45 @@
+# Arquivo de configuração do projeto Python (pyproject.toml)
+# Define metadados do projeto e dependências necessárias
+
 [project]
+# Nome do projeto
 name = "templates-static"
+
+# Versão atual do projeto (seguindo versionamento semântico)
 version = "0.1.0"
+
+# Descrição do projeto
 description = "Add your description here"
+
+# Arquivo README com documentação do projeto
 readme = "README.md"
+
+# Versão mínima do Python requerida para executar o projeto
 requires-python = ">=3.14"
+
+# Lista de dependências do projeto
 dependencies = [
+    # FastAPI: Framework web moderno e rápido para construir APIs com Python
     "fastapi>=0.100.0",
+    
+    # Google Generative AI: Biblioteca para integração com a API do Google Gemini
     "generativeai>=0.0.1",
+    
+    # Jinja2: Motor de templates para renderização de HTML
     "jinja2>=3.1.6",
+    
+    # Pydantic: Validação de dados e configuração usando type hints do Python
     "pydantic>=2",
+    
+    # Python-dotenv: Carrega variáveis de ambiente de arquivos .env
     "python-dotenv>=1.0.0",
+    
+    # Python-multipart: Suporte para upload de arquivos e dados multipart/form-data
     "python-multipart>=0.0.21",
+    
+    # Requests: Biblioteca HTTP para fazer requisições a APIs externas
     "requests>=2.32.5",
+    
+    # Uvicorn: Servidor ASGI de alta performance para rodar a aplicação FastAPI
     "uvicorn==0.22.0",
 ]
