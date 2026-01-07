@@ -1,141 +1,224 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!-- Define a codificação de caracteres como UTF-8 para suportar caracteres especiais -->
     <meta charset="UTF-8">
+    <!-- Configura a viewport para responsividade em dispositivos móveis -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título da página que aparece na aba do navegador -->
     <title>Inkly - Desenhe com IA! 🎨</title>
+    <!-- Importa o framework Tailwind CSS via CDN para estilização rápida -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* Importa a fonte Fredoka do Google Fonts com diferentes pesos */
         @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
+        /* Define a fonte Fredoka como padrão para todos os elementos */
         * { font-family: 'Fredoka', sans-serif; }
         
+        /* Animação de flutuação que move o elemento para cima e para baixo */
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+            0%, 100% { transform: translateY(0px); } /* Posição inicial e final */
+            50% { transform: translateY(-20px); } /* Posição no meio da animação (sobe 20px) */
         }
         
+        /* Animação de brilho que alterna a intensidade da sombra */
         @keyframes glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(168, 85, 247, 0.4); }
-            50% { box-shadow: 0 0 40px rgba(168, 85, 247, 0.8); }
+            0%, 100% { box-shadow: 0 0 20px rgba(168, 85, 247, 0.4); } /* Brilho suave */
+            50% { box-shadow: 0 0 40px rgba(168, 85, 247, 0.8); } /* Brilho intenso */
         }
         
+        /* Classe que aplica a animação de flutuação continuamente */
         .float { animation: float 3s ease-in-out infinite; }
+        /* Classe que aplica a animação de brilho continuamente */
         .glow { animation: glow 2s ease-in-out infinite; }
+        /* Gradiente roxo/violeta para o fundo da página */
         .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
     </style>
 </head>
 <body class="gradient-bg min-h-screen flex items-center justify-center p-4">
+    <!-- Elemento de áudio para música de fundo (loop = repetir continuamente) -->
     <audio id="bgMusic" loop>
+        <!-- Fonte do arquivo de áudio MP3 -->
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
 
+    <!-- Container principal com largura máxima e centralizado -->
     <div class="max-w-2xl w-full">
+        <!-- Cabeçalho com título e subtítulo (com animação de flutuação) -->
         <div class="text-center mb-8 float">
+            <!-- Título principal do jogo com emoji -->
             <h1 class="text-7xl font-bold text-white mb-2">🎨 Inkly</h1>
+            <!-- Subtítulo explicativo -->
             <p class="text-2xl text-purple-200">Desenhe e surpreenda a IA!</p>
         </div>
 
+        <!-- Card principal branco com sombra e efeito de brilho -->
         <div class="bg-white rounded-3xl shadow-2xl p-8 mb-6 glow">
+            <!-- Seção de boas-vindas -->
             <div class="text-center mb-6">
+                <!-- Emojis decorativos grandes -->
                 <div class="text-6xl mb-4">🤖✨</div>
+                <!-- Título de boas-vindas -->
                 <h2 class="text-3xl font-bold text-gray-800 mb-2">Bem-vindo ao Inkly!</h2>
+                <!-- Descrição do jogo -->
                 <p class="text-gray-600 text-lg">
                     Uma IA vai tentar adivinhar o que você está desenhando.<br>
                     Será que consegue confundir ou impressionar ela? 🎭
                 </p>
             </div>
 
+            <!-- Seção do formulário de nome do jogador -->
             <div class="mb-6">
+                <!-- Label do campo de entrada -->
                 <label class="block text-gray-700 font-semibold mb-2 text-lg">Como você se chama?</label>
+                <!-- Campo de texto para o jogador digitar o nome (máximo 20 caracteres) -->
                 <input type="text" id="playerName" placeholder="Digite seu nome..."
                     class="w-full px-6 py-4 text-lg border-4 border-purple-300 rounded-2xl focus:outline-none focus:border-purple-500 transition-all"
                     maxlength="20">
             </div>
 
+            <!-- Botão principal para iniciar o jogo -->
             <button onclick="startGame()"
                 class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-5 px-8 rounded-2xl text-xl hover:scale-105 transform transition-all shadow-lg hover:shadow-xl">
                 🚀 Começar a Desenhar!
             </button>
 
+            <!-- Seção de controle de música -->
             <div class="mt-6 text-center">
+                <!-- Botão para ativar/pausar música de fundo -->
                 <button onclick="toggleMusic()" id="musicBtn"
                     class="text-purple-600 hover:text-purple-800 font-semibold flex items-center justify-center mx-auto">
+                    <!-- Emoji de nota musical -->
                     <span class="text-2xl mr-2">🎵</span>
+                    <!-- Texto do status da música -->
                     <span id="musicStatus">Ativar Música</span>
                 </button>
             </div>
         </div>
 
+        <!-- Grid de cards de recursos/funcionalidades (3 colunas em desktop, 1 em mobile) -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Card 1: Pincéis Mágicos -->
             <div class="bg-white bg-opacity-90 rounded-2xl p-6 text-center transform hover:scale-105 transition-all">
+                <!-- Emoji do pincel -->
                 <div class="text-4xl mb-2">🎨</div>
+                <!-- Título do recurso -->
                 <h3 class="font-bold text-gray-800 mb-1">Pincéis Mágicos</h3>
+                <!-- Descrição breve -->
                 <p class="text-sm text-gray-600">Desbloqueie pincéis especiais</p>
             </div>
+            <!-- Card 2: Conquistas -->
             <div class="bg-white bg-opacity-90 rounded-2xl p-6 text-center transform hover:scale-105 transition-all">
+                <!-- Emoji do troféu -->
                 <div class="text-4xl mb-2">🏆</div>
+                <!-- Título do recurso -->
                 <h3 class="font-bold text-gray-800 mb-1">Conquistas</h3>
+                <!-- Descrição breve -->
                 <p class="text-sm text-gray-600">Desbloqueie troféus épicos</p>
             </div>
+            <!-- Card 3: Multiplayer -->
             <div class="bg-white bg-opacity-90 rounded-2xl p-6 text-center transform hover:scale-105 transition-all">
+                <!-- Emoji de aperto de mão -->
                 <div class="text-4xl mb-2">🤝</div>
+                <!-- Título do recurso -->
                 <h3 class="font-bold text-gray-800 mb-1">Multiplayer</h3>
+                <!-- Descrição breve -->
                 <p class="text-sm text-gray-600">Desafie seus amigos</p>
             </div>
         </div>
 
+        <!-- Rodapé com créditos -->
         <div class="text-center mt-8 text-white text-sm">
+            <!-- Texto indicando que usa Google Gemini AI -->
             <p>✨ Powered by Google Gemini AI ✨</p>
         </div>
     </div>
 
     <script>
+        // Variável para controlar se a música está tocando ou não
         let musicPlaying = false;
+        // Referência ao elemento de áudio HTML
         const music = document.getElementById('bgMusic');
 
+        /**
+         * Função para alternar entre tocar e pausar a música de fundo
+         * Atualiza o estado da música e a interface do botão
+         */
         function toggleMusic() {
+            // Inverte o estado da música (true -> false ou false -> true)
             musicPlaying = !musicPlaying;
+            
+            // Se a música deve tocar
             if (musicPlaying) {
+                // Inicia a reprodução do áudio
                 music.play();
+                // Atualiza o texto do botão
                 document.getElementById('musicStatus').textContent = 'Pausar Música';
+                // Atualiza o emoji do botão (nota musical -> alto-falante)
                 document.getElementById('musicBtn').innerHTML = '<span class="text-2xl mr-2">🔊</span><span id="musicStatus">Pausar Música</span>';
             } else {
+                // Pausa a reprodução do áudio
                 music.pause();
+                // Atualiza o texto do botão
                 document.getElementById('musicStatus').textContent = 'Ativar Música';
+                // Atualiza o emoji do botão (alto-falante -> nota musical)
                 document.getElementById('musicBtn').innerHTML = '<span class="text-2xl mr-2">🎵</span><span id="musicStatus">Ativar Música</span>';
             }
         }
 
+        /**
+         * Função assíncrona para iniciar o jogo
+         * Valida o nome do jogador, cria uma sessão no servidor e redireciona para a página do jogo
+         */
         async function startGame() {
+            // Obtém o nome do jogador e remove espaços em branco no início e fim
             const name = document.getElementById('playerName').value.trim();
+            
+            // Valida se o nome foi preenchido
             if (!name) {
+                // Exibe mensagem de erro se o nome estiver vazio
                 alert('Por favor, digite seu nome! 😊');
-                return;
+                return; // Interrompe a execução da função
             }
 
             try {
+                // Obtém referência ao botão que foi clicado
                 const btn = event.target;
+                // Desabilita o botão para evitar cliques múltiplos
                 btn.disabled = true;
+                // Atualiza o texto do botão para indicar carregamento
                 btn.innerHTML = '🎨 Preparando sua tela...';
                 
+                // Faz uma requisição POST para a API criar um novo jogador
                 const response = await fetch('/api/player/create', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({name})
+                    method: 'POST', // Método HTTP POST
+                    headers: {'Content-Type': 'application/json'}, // Define o tipo de conteúdo como JSON
+                    body: JSON.stringify({name}) // Envia o nome do jogador em formato JSON
                 });
 
+                // Converte a resposta da API em objeto JavaScript
                 const data = await response.json();
+                
+                // Salva o ID do jogador no localStorage do navegador
                 localStorage.setItem('inkly_player_id', data.player_id);
+                // Salva a preferência de música no localStorage
                 localStorage.setItem('inkly_music', musicPlaying);
+                
+                // Redireciona para a página do jogo com o ID do jogador na URL
                 window.location.href = `/game?player_id=${data.player_id}`;
             } catch (error) {
+                // Se houver algum erro na requisição, exibe mensagem amigável
                 alert('Ops! Algo deu errado. Tente novamente! 🙏');
+                // Reabilita o botão para permitir nova tentativa
                 btn.disabled = false;
+                // Restaura o texto original do botão
                 btn.innerHTML = '🚀 Começar a Desenhar!';
             }
         }
 
+        // Adiciona listener para detectar quando a tecla Enter é pressionada no campo de nome
         document.getElementById('playerName').addEventListener('keypress', (e) => {
+            // Se a tecla pressionada for Enter, inicia o jogo
             if (e.key === 'Enter') startGame();
         });
     </script>
