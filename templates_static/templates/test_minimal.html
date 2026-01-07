@@ -1,97 +1,193 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <!-- Título da página exibido na aba do navegador -->
     <title>Minimal Canvas Test</title>
+    
+    <!-- Estilos CSS para a página -->
     <style>
+        /* Estilo do corpo da página: margem de 20px e fonte Arial */
         body { margin: 20px; font-family: Arial; }
+        
+        /* Estilo do canvas: borda preta de 3px, fundo branco, cursor em forma de cruz */
+        /* width e height definem as dimensões de exibição do canvas */
         canvas { border: 3px solid black; display: block; background: white; cursor: crosshair; width: 600px; height: 400px; }
+        
+        /* Estilo da área de log: borda cinza, padding, altura fixa com scroll vertical */
+        /* Fonte monoespaçada para melhor visualização dos logs */
         .log { border: 1px solid #ccc; padding: 10px; height: 150px; overflow-y: auto; font-size: 12px; font-family: monospace; }
+        
+        /* Classe para mensagens de erro em vermelho */
         .error { color: red; }
+        
+        /* Classe para mensagens de sucesso em verde */
         .success { color: green; }
     </style>
 </head>
 <body>
+    <!-- Título principal da página -->
     <h1>Minimal Canvas Drawing Test</h1>
+    
+    <!-- Instruções para o usuário -->
     <p>Try drawing on the canvas below. Check the log for events.</p>
     
+    <!-- Canvas onde o usuário pode desenhar -->
+    <!-- width e height definem a resolução real do canvas (600x400 pixels) -->
     <canvas id="mycanvas" width="600" height="400"></canvas>
     
+    <!-- Seção de log de eventos -->
     <h3>Events Log:</h3>
     <div class="log" id="log"></div>
     
     <script>
+        // Obtém a referência do elemento canvas
         const canvas = document.getElementById('mycanvas');
+        
+        // Obtém o contexto 2D do canvas para desenhar
         const ctx = canvas.getContext('2d');
+        
+        // Variável que controla se o usuário está desenhando (mouse pressionado)
         let isDrawing = false;
+        
+        // Armazena a última posição X do mouse
         let lastX = 0;
+        
+        // Armazena a última posição Y do mouse
         let lastY = 0;
         
+        /**
+         * Função para adicionar uma mensagem no log de eventos
+         * @param {string} msg - Mensagem a ser exibida
+         * @param {string} type - Tipo da mensagem ('info', 'success', 'error')
+         */
         function addLog(msg, type = 'info') {
+            // Obtém a div do log
             const logDiv = document.getElementById('log');
+            
+            // Cria um novo elemento div para a linha de log
             const line = document.createElement('div');
+            
+            // Define a classe CSS baseada no tipo (para colorir a mensagem)
             line.className = type;
+            
+            // Define o texto com timestamp e mensagem
             line.textContent = '[' + new Date().toLocaleTimeString() + '] ' + msg;
+            
+            // Adiciona a nova linha ao log
             logDiv.appendChild(line);
+            
+            // Faz scroll automático para mostrar a última mensagem
             logDiv.scrollTop = logDiv.scrollHeight;
         }
         
-        // Fill with white
+        // Preenche todo o canvas com cor branca
         ctx.fillStyle = '#FFFFFF';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         addLog('Canvas initialized', 'success');
         
-        // Test line
-        ctx.strokeStyle = '#FF0000';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(10, 10);
-        ctx.lineTo(100, 100);
-        ctx.stroke();
+        // Desenha uma linha vermelha de teste diagonal
+        ctx.strokeStyle = '#FF0000'; // Cor vermelha
+        ctx.lineWidth = 2; // Espessura de 2 pixels
+        ctx.beginPath(); // Inicia um novo caminho
+        ctx.moveTo(10, 10); // Move para o ponto inicial (10, 10)
+        ctx.lineTo(100, 100); // Desenha linha até (100, 100)
+        ctx.stroke(); // Aplica o traçado
         addLog('Test red line drawn', 'success');
         
+        /**
+         * Evento disparado quando o usuário pressiona o botão do mouse no canvas
+         * Inicia o modo de desenho e registra a posição inicial
+         */
         canvas.addEventListener('mousedown', (e) => {
+            // Ativa o modo de desenho
             isDrawing = true;
+            
+            // Obtém as coordenadas do canvas na página
             const rect = canvas.getBoundingClientRect();
+            
+            // Calcula a posição X do mouse relativa ao canvas
             lastX = e.clientX - rect.left;
+            
+            // Calcula a posição Y do mouse relativa ao canvas
             lastY = e.clientY - rect.top;
+            
+            // Registra no log a posição onde o desenho começou
             addLog('mousedown at (' + lastX + ', ' + lastY + ')', 'success');
         });
         
+        /**
+         * Evento disparado quando o usuário move o mouse sobre o canvas
+         * Desenha uma linha se o modo de desenho estiver ativo
+         */
         canvas.addEventListener('mousemove', (e) => {
+            // Se não estiver desenhando, não faz nada
             if (!isDrawing) return;
             
+            // Obtém as coordenadas do canvas na página
             const rect = canvas.getBoundingClientRect();
+            
+            // Calcula a posição X atual do mouse relativa ao canvas
             const x = e.clientX - rect.left;
+            
+            // Calcula a posição Y atual do mouse relativa ao canvas
             const y = e.clientY - rect.top;
             
-            // Draw line
+            // Configura a cor da linha (preto)
             ctx.strokeStyle = '#000000';
+            
+            // Configura a espessura da linha
             ctx.lineWidth = 3;
+            
+            // Configura as pontas da linha para serem arredondadas
             ctx.lineCap = 'round';
+            
+            // Configura as junções da linha para serem arredondadas
             ctx.lineJoin = 'round';
+            
+            // Inicia um novo caminho para desenhar
             ctx.beginPath();
+            
+            // Move para a última posição registrada
             ctx.moveTo(lastX, lastY);
+            
+            // Desenha uma linha até a posição atual
             ctx.lineTo(x, y);
+            
+            // Aplica o traçado no canvas
             ctx.stroke();
             
+            // Atualiza a última posição X para a posição atual
             lastX = x;
+            
+            // Atualiza a última posição Y para a posição atual
             lastY = y;
         });
         
+        /**
+         * Evento disparado quando o usuário solta o botão do mouse
+         * Desativa o modo de desenho
+         */
         canvas.addEventListener('mouseup', () => {
+            // Se estava desenhando, desativa o modo de desenho
             if (isDrawing) {
                 isDrawing = false;
                 addLog('mouseup', 'info');
             }
         });
         
+        /**
+         * Evento disparado quando o mouse sai da área do canvas
+         * Desativa o modo de desenho para evitar comportamento inesperado
+         */
         canvas.addEventListener('mouseleave', () => {
+            // Se estava desenhando, desativa o modo de desenho
             if (isDrawing) {
                 isDrawing = false;
                 addLog('mouseleave', 'info');
             }
         });
         
+        // Registra no log que o canvas está pronto para uso
         addLog('Canvas ready for drawing!', 'success');
     </script>
 </body>
